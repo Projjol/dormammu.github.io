@@ -1,0 +1,287 @@
+	
+	<!doctype html>
+<html lang="en">
+  <head>    
+    <title>Macrocosm - Understanding RSA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    
+    <link href="../../css/milk.min.css" rel="stylesheet">
+    <link href="../../css/milk-responsive.min.css" rel="stylesheet">     
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../../css/fonts.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="shortcut icon" href="../../images/jedi.ico"> 
+    <link rel="apple-touch-icon" href="">
+    <link rel="canonical" href="http://blog.projjol.me/post/understanding-RSA/">
+
+    
+    <link href="../../rss.xml" type="application/atom+xml" rel="alternate" title="Macrocosm">    
+
+  </head>
+  <body>    
+    <div class="navbar navbar-fixed-top">        
+  <div id="navbar-inner">
+          <div id="logo" class="">
+            <a href=""><img src="../../images/jedi.png" width="100px"></img></a>
+          </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="content">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="posts">
+      
+
+	    
+	  <div class="post">
+	    <header class="post-header">
+	        <h1><a href="../../post/understanding-RSA/">Understanding RSA</a></h1>
+	        <div class="post-time">November 24 2016</div>
+	    </header>
+	    <div class="post-after">
+	        <div class="tags">
+	            
+	        </div>
+	    </div>
+	    <hr>
+	    <div class="post content">
+	        
+
+<h1 id="what-is-public-key-cryptography">What is Public Key Cryptography?</h1>
+
+<p>Public Key Cryptography (AKA asymmetric cryptography) is a <a href="https://en.wikipedia.org/wiki/Cryptosystem">cryptosystem</a> which consists of a pair of keys, i.e public and private.
+The public key can be widely disseminated whilst the private key should be known to the owner only. Public Key Cryptography(PKC from hereonforth) is also known as asymmetric cryptography because the public and private keys are different from each other and do not match.
+With PKC, to send a message to the recipient of the private key, one merely requires the public key. The public key can be used to sign and encrypt a message which can only be decrypted by the owner of the corresponding private key.
+The strength of a PKC cryptosystem depends on how hard it is to determine the private key by working backwards from the public key.</p>
+
+<h1 id="what-is-rsa">What is RSA?</h1>
+
+<p>The RSA cryptosystem is named after it&rsquo;s creators <em>Rivest</em>, <em>Shamir</em> &amp; <em>Adleman</em> and is one of the first implementations of a PKC cryptosystem.</p>
+
+<p>It has 4 steps:</p>
+
+<ul>
+<li>Key generation</li>
+<li>Key distribution</li>
+<li>Encryption</li>
+<li>Decryption</li>
+</ul>
+
+<p>Let&rsquo;s start with <strong>Key Generation</strong></p>
+
+<h1 id="key-generation">Key Generation</h1>
+
+<p>Take two prime numbers (in proper implementations, large prime numbers are chosen, however for the sake of this post we&rsquo;ll choose smaller, easier to follow primes). Let <em>p</em> &amp; q be the prime numbers in question. A third number <em>n</em> is a product of the chosen primes.</p>
+
+<pre><code>n = p*q
+</code></pre>
+
+<p><em>n</em> is considered a modulus. Modulo arithmetic is used to calculate the remainder of a division operation. The idea behind using modulo is to find numbers in the same group, i.e</p>
+
+<pre><code>3 mod 7 = 3
+
+10 mod 7 = 3
+</code></pre>
+
+<p>This relationship can also be expressed as <code>10 ≡ 3 mod 7</code>, where &lsquo;≡&rsquo; is to represent congruence. In simpler terms, <code>10 ≡ 3 mod 7</code> is a shorter way of expressing <code>10 mod 7 = 3 mod 7</code>
+Therefore, 3 and 10 are a part of the group where the remainder is 3. <strong>Why this is important, I&rsquo;ll show later.</strong>
+While we&rsquo;re still on key generation it&rsquo;ll be a good idea to check out Euler’s totient formula</p>
+
+<h1 id="euler-s-totient">Euler’s Totient</h1>
+
+<p>Euler’s totient, represented as φ, is a function on a number that returns the number of positive integers upto the number itself that are co-prime to it.</p>
+
+<p>Lolwat. Let&rsquo;s break this down. Firstly, what&rsquo;s co-prime? Any two numbers whose <a href="https://www.khanacademy.org/math/pre-algebra/pre-algebra-factors-multiples/pre-algebra-greatest-common-divisor/v/greatest-common-divisor">GCD</a> is 1 are considered to be co-prime to each other. So φ(n) finds all the numbers from 1 to <em>n</em>-1 that are co-prime to n. An example of this would be:</p>
+
+<pre><code>φ(5) = 1,2,3,4  [here 1,2,3,4 have a GCD of 1 with 5]
+φ(6) = 1,5      
+</code></pre>
+
+<p>Euler’s totient has the property of being commutative i.e :</p>
+
+<pre><code>φ(n) = φ(p)*φ(q)
+</code></pre>
+
+<p>This property will be of use once we re-vist the Key Generation process.</p>
+
+<h1 id="key-generation-contd">Key Generation (contd.)</h1>
+
+<p>So, till this point we have calculated <em>n</em>, which is the product of two random prime numbers that we have selected. As mentioned earlier, <em>n</em> is the modulus and is used to determine the length of the the public and private keys. This can be determined from the fact that the length of <em>n</em> in bits is the length of the key itself. So for example someone uses a 1024 bit RSA key, the value of <em>n</em> would be in the range of <em>0-2^1023</em>.
+Euler’s totient that we saw in the previous section comes of use now, especially the commutative property:</p>
+
+<pre><code> φ(n) = φ(p)*φ(q) = (p − 1)(q − 1) = n − (p + q − 1)                 
+</code></pre>
+
+<p>For prime numbers φ(n) is 1-(<em>n</em>-1), check φ(5) above.</p>
+
+<p>Considering <em>p</em> &amp; <em>q</em> to be 7 &amp; 13, <em>n</em> = 91</p>
+
+<p>Therefore, φ(<em>n</em>) = 91 - (7 + 13 - 1) =  72</p>
+
+<p>This value calculated for Euler&rsquo;s totient is kept a secret.</p>
+
+<p>Now, an integer <em>e</em> needs to be obtained such that 1 &gt; <em>e</em> &lt; φ(<em>n</em>) and gcd(<em>e</em>, φ(<em>n</em>)) =1, i.e <em>e</em> &amp; φ(<em>n</em>) are coprime.
+Let,</p>
+
+<pre><code>e = 11
+</code></pre>
+
+<p>Next step is to compute the modular multiplicative inverse of e.</p>
+
+<p>Lolwat?</p>
+
+<h1 id="modular-multiplicative-inverse">Modular Multiplicative Inverse</h1>
+
+<p>Let’s say we have a number <em>n</em>. The multiplicative inverse of <em>n</em> would be <em>n</em>^-1, such that <em>n</em>*<em>n</em>^-1 = 1
+In modular mathematics, the modular inverse of <em>n</em>(mod <em>c</em>) is <em>n</em>^-1 for some number <em>c</em>.</p>
+
+<p>We have,</p>
+
+<pre><code>n * n^-1 = 1 (mod c) = 1 
+</code></pre>
+
+<p>Therefore,</p>
+
+<pre><code>n * n(mod c) = 1
+</code></pre>
+
+<p>All of this is fine, but how do we calculate how to actually calculate the modular inverse?</p>
+
+<p>Here&rsquo;s the long method:</p>
+
+<ul>
+<li>Calculate <em>n</em> * <em>x</em> ( x has values from 0- <em>c</em>-1)</li>
+<li>Modular inverse is the value of <em>x</em> where <em>n</em>*<em>x</em> mod <em>c</em> = 1</li>
+</ul>
+
+<p>Let n = 4, c = 7,</p>
+
+<p>Values of x = {0,1,2,3,4,5,6}</p>
+
+<ul>
+<li>4 * 0 ≡ 0 ≡ 0 (mod 7)</li>
+<li>4 * 1 ≡ 4 ≡ 4 (mod 7)</li>
+<li>4 * 2 ≡ 8 ≡ 1 (mod 7) —&gt; bingo</li>
+</ul>
+
+<p>Let&rsquo;s see it in isolation:</p>
+
+<pre><code>4(n) * 2(x) mod 7( c ) = 1 [This satisfies the condition we were looking for]
+</code></pre>
+
+<p>Note that this is a slow method to calculate the modular inverse of a number and using the <a href="https://www.math.utah.edu/~fguevara/ACCESS2013/Euclid.pdf">Extended Euclidean Algorithm</a>, better performance can be achieved.</p>
+
+<h1 id="key-generation-contd-1">Key Generation (contd.)</h1>
+
+<p>Alright, so we have,</p>
+
+<pre><code>e = 11, φ(n) = 72, 
+</code></pre>
+
+<p>And we need to calculate their modular multiplicative inverse such that:</p>
+
+<pre><code>e*d mod φ(n) = 1 mod φ(n)
+</code></pre>
+
+<p>Let’s find the value of d!</p>
+
+<ul>
+<li>11 * 0 ≡ 0 ≡ 0 (mod 72)</li>
+<li>11 * 1 ≡ 11 ≡ 11 (mod 72)</li>
+<li>11 * 2 ≡ 22 ≡ 22 (mod 72)</li>
+<li>&hellip;&hellip;..</li>
+<li>11 * 59 ≡ 649 ≡ 1 (mod 72) —&gt; gotcha</li>
+</ul>
+
+<p>Therefore,</p>
+
+<pre><code>d = 59 
+</code></pre>
+
+<p>With this computation done, the public key is made with the values in <em>n</em> and <em>e</em> and the private key is made using values in <em>n</em> and <em>d</em>.</p>
+
+<p>One question does arise though, why did we calculate the modular inverse of <em>e</em> ? Consider the following:</p>
+
+<pre><code>E(M) = M^e mod n
+C ≡ M^e mod n
+D(C) = C^d mod n
+C^d ≡ (M^e)^d mod n
+C^d ≡ (M^(e*d)) mod n
+e*d ≡ 1 mod n 
+e*d ≡ kϕ(n)+1
+=&gt; D(C) = M^(kϕ(n)+1) mod n
+=&gt; D(C) = M * (M^ϕ(n))^k
+=&gt; D(C) = M * (1 mod n)^k
+=&gt; D(C) = M * 1^k
+=&gt; D(C) = M         [original message]
+</code></pre>
+
+<p>By finding the inverse of e, we find the value which when the message is raised to gives back the original message, thereby acheiving a working public-private key cryptosystem.</p>
+
+<h1 id="simple-example">Simple Example</h1>
+
+<pre><code>e = 11
+d = 59
+n = 91
+</code></pre>
+
+<p>Let the message be <em>9</em></p>
+
+<p>Encryption:</p>
+
+<pre><code>E(M) = M^e mod n
+=&gt; 9^11 mod 91
+=&gt; 81
+D(C) = C^d mod n
+=&gt; 81^59 mod 91
+=&gt; 9 [the original message]
+</code></pre>
+
+<h1 id="errata">Errata</h1>
+
+<p>The idea behind the public key is to have a prime number between 3 and φ(n). Normally, values behind public key cryptography involves large numbers (if you remember, the size of the key could be as high as 2^1023 or 2^2023 but we’re mostly pushing it at key lengths above 2024 bits), so popular implementations set it as <a href="http://crypto.stackexchange.com/questions/3110/impacts-of-not-using-rsa-exponent-of-65537">65537</a> as a good tradeoff between sufficiently high and being a decent enough cost to raise a number to.
+A good point that might be made is whether or not the fact that everyone knows if 65537 is a public key exponent. This is the public key that is being shared with people anyway and as long as one cannot deduce the private key from it, there should not be a problem.</p>
+
+	    </div>
+	    
+	<div class="about">
+	<p> 
+     
+    </p>
+</div>
+		<nav id="pagination">
+			
+			
+		</nav>
+	
+		        <footer>
+		        	Built with <a href="https://github.com/spf13/hugo">Hugo</a> using <a href="themes.gohugo.io/simple-a/">simple-a</a> theme and ♥ 
+		        	<p>© Projjol Banerji 2016</p>
+		        </footer>
+		    </div>
+		  </div>    
+		</div>
+      </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + ":change-me";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="http://change-me" style="border:0;" alt="" /></p></noscript>
+
+
+</html>

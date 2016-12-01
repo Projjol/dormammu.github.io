@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title> on Macrocosm </title>
+    <link>http://blog.projjol.me/index.xml</link>
+    <language>en-us</language>
+    <author>Alexander Ivanov</author>
+    <updated>2016-11-24 12:09:47 &#43;0530 IST</updated>
+    
+    <item>
+      <title>Understanding RSA</title>
+      <link>http://blog.projjol.me/post/understanding-RSA/</link>
+      <pubDate>Thu, 24 Nov 2016 12:09:47 IST</pubDate>
+      <author>Alexander Ivanov</author>
+      <guid>http://blog.projjol.me/post/understanding-RSA/</guid>
+      <description>
+
+&lt;h1 id=&#34;what-is-public-key-cryptography&#34;&gt;What is Public Key Cryptography?&lt;/h1&gt;
+
+&lt;p&gt;Public Key Cryptography (AKA asymmetric cryptography) is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Cryptosystem&#34;&gt;cryptosystem&lt;/a&gt; which consists of a pair of keys, i.e public and private.
+The public key can be widely disseminated whilst the private key should be known to the owner only. Public Key Cryptography(PKC from hereonforth) is also known as asymmetric cryptography because the public and private keys are different from each other and do not match.
+With PKC, to send a message to the recipient of the private key, one merely requires the public key. The public key can be used to sign and encrypt a message which can only be decrypted by the owner of the corresponding private key.
+The strength of a PKC cryptosystem depends on how hard it is to determine the private key by working backwards from the public key.&lt;/p&gt;
+
+&lt;h1 id=&#34;what-is-rsa&#34;&gt;What is RSA?&lt;/h1&gt;
+
+&lt;p&gt;The RSA cryptosystem is named after it&amp;rsquo;s creators &lt;em&gt;Rivest&lt;/em&gt;, &lt;em&gt;Shamir&lt;/em&gt; &amp;amp; &lt;em&gt;Adleman&lt;/em&gt; and is one of the first implementations of a PKC cryptosystem.&lt;/p&gt;
+
+&lt;p&gt;It has 4 steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Key generation&lt;/li&gt;
+&lt;li&gt;Key distribution&lt;/li&gt;
+&lt;li&gt;Encryption&lt;/li&gt;
+&lt;li&gt;Decryption&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start with &lt;strong&gt;Key Generation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;key-generation&#34;&gt;Key Generation&lt;/h1&gt;
+
+&lt;p&gt;Take two prime numbers (in proper implementations, large prime numbers are chosen, however for the sake of this post we&amp;rsquo;ll choose smaller, easier to follow primes). Let &lt;em&gt;p&lt;/em&gt; &amp;amp; q be the prime numbers in question. A third number &lt;em&gt;n&lt;/em&gt; is a product of the chosen primes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;n = p*q
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;n&lt;/em&gt; is considered a modulus. Modulo arithmetic is used to calculate the remainder of a division operation. The idea behind using modulo is to find numbers in the same group, i.e&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;3 mod 7 = 3
+
+10 mod 7 = 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This relationship can also be expressed as &lt;code&gt;10 ≡ 3 mod 7&lt;/code&gt;, where &amp;lsquo;≡&amp;rsquo; is to represent congruence. In simpler terms, &lt;code&gt;10 ≡ 3 mod 7&lt;/code&gt; is a shorter way of expressing &lt;code&gt;10 mod 7 = 3 mod 7&lt;/code&gt;
+Therefore, 3 and 10 are a part of the group where the remainder is 3. &lt;strong&gt;Why this is important, I&amp;rsquo;ll show later.&lt;/strong&gt;
+While we&amp;rsquo;re still on key generation it&amp;rsquo;ll be a good idea to check out Euler’s totient formula&lt;/p&gt;
+
+&lt;h1 id=&#34;euler-s-totient&#34;&gt;Euler’s Totient&lt;/h1&gt;
+
+&lt;p&gt;Euler’s totient, represented as φ, is a function on a number that returns the number of positive integers upto the number itself that are co-prime to it.&lt;/p&gt;
+
+&lt;p&gt;Lolwat. Let&amp;rsquo;s break this down. Firstly, what&amp;rsquo;s co-prime? Any two numbers whose &lt;a href=&#34;https://www.khanacademy.org/math/pre-algebra/pre-algebra-factors-multiples/pre-algebra-greatest-common-divisor/v/greatest-common-divisor&#34;&gt;GCD&lt;/a&gt; is 1 are considered to be co-prime to each other. So φ(n) finds all the numbers from 1 to &lt;em&gt;n&lt;/em&gt;-1 that are co-prime to n. An example of this would be:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;φ(5) = 1,2,3,4  [here 1,2,3,4 have a GCD of 1 with 5]
+φ(6) = 1,5      
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Euler’s totient has the property of being commutative i.e :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;φ(n) = φ(p)*φ(q)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This property will be of use once we re-vist the Key Generation process.&lt;/p&gt;
+
+&lt;h1 id=&#34;key-generation-contd&#34;&gt;Key Generation (contd.)&lt;/h1&gt;
+
+&lt;p&gt;So, till this point we have calculated &lt;em&gt;n&lt;/em&gt;, which is the product of two random prime numbers that we have selected. As mentioned earlier, &lt;em&gt;n&lt;/em&gt; is the modulus and is used to determine the length of the the public and private keys. This can be determined from the fact that the length of &lt;em&gt;n&lt;/em&gt; in bits is the length of the key itself. So for example someone uses a 1024 bit RSA key, the value of &lt;em&gt;n&lt;/em&gt; would be in the range of &lt;em&gt;0-2^1023&lt;/em&gt;.
+Euler’s totient that we saw in the previous section comes of use now, especially the commutative property:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; φ(n) = φ(p)*φ(q) = (p − 1)(q − 1) = n − (p + q − 1)                 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For prime numbers φ(n) is 1-(&lt;em&gt;n&lt;/em&gt;-1), check φ(5) above.&lt;/p&gt;
+
+&lt;p&gt;Considering &lt;em&gt;p&lt;/em&gt; &amp;amp; &lt;em&gt;q&lt;/em&gt; to be 7 &amp;amp; 13, &lt;em&gt;n&lt;/em&gt; = 91&lt;/p&gt;
+
+&lt;p&gt;Therefore, φ(&lt;em&gt;n&lt;/em&gt;) = 91 - (7 + 13 - 1) =  72&lt;/p&gt;
+
+&lt;p&gt;This value calculated for Euler&amp;rsquo;s totient is kept a secret.&lt;/p&gt;
+
+&lt;p&gt;Now, an integer &lt;em&gt;e&lt;/em&gt; needs to be obtained such that 1 &amp;gt; &lt;em&gt;e&lt;/em&gt; &amp;lt; φ(&lt;em&gt;n&lt;/em&gt;) and gcd(&lt;em&gt;e&lt;/em&gt;, φ(&lt;em&gt;n&lt;/em&gt;)) =1, i.e &lt;em&gt;e&lt;/em&gt; &amp;amp; φ(&lt;em&gt;n&lt;/em&gt;) are coprime.
+Let,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;e = 11
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next step is to compute the modular multiplicative inverse of e.&lt;/p&gt;
+
+&lt;p&gt;Lolwat?&lt;/p&gt;
+
+&lt;h1 id=&#34;modular-multiplicative-inverse&#34;&gt;Modular Multiplicative Inverse&lt;/h1&gt;
+
+&lt;p&gt;Let’s say we have a number &lt;em&gt;n&lt;/em&gt;. The multiplicative inverse of &lt;em&gt;n&lt;/em&gt; would be &lt;em&gt;n&lt;/em&gt;^-1, such that &lt;em&gt;n&lt;/em&gt;*&lt;em&gt;n&lt;/em&gt;^-1 = 1
+In modular mathematics, the modular inverse of &lt;em&gt;n&lt;/em&gt;(mod &lt;em&gt;c&lt;/em&gt;) is &lt;em&gt;n&lt;/em&gt;^-1 for some number &lt;em&gt;c&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;We have,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;n * n^-1 = 1 (mod c) = 1 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Therefore,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;n * n(mod c) = 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;All of this is fine, but how do we calculate how to actually calculate the modular inverse?&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the long method:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Calculate &lt;em&gt;n&lt;/em&gt; * &lt;em&gt;x&lt;/em&gt; ( x has values from 0- &lt;em&gt;c&lt;/em&gt;-1)&lt;/li&gt;
+&lt;li&gt;Modular inverse is the value of &lt;em&gt;x&lt;/em&gt; where &lt;em&gt;n&lt;/em&gt;*&lt;em&gt;x&lt;/em&gt; mod &lt;em&gt;c&lt;/em&gt; = 1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let n = 4, c = 7,&lt;/p&gt;
+
+&lt;p&gt;Values of x = {0,1,2,3,4,5,6}&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;4 * 0 ≡ 0 ≡ 0 (mod 7)&lt;/li&gt;
+&lt;li&gt;4 * 1 ≡ 4 ≡ 4 (mod 7)&lt;/li&gt;
+&lt;li&gt;4 * 2 ≡ 8 ≡ 1 (mod 7) —&amp;gt; bingo&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see it in isolation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;4(n) * 2(x) mod 7( c ) = 1 [This satisfies the condition we were looking for]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that this is a slow method to calculate the modular inverse of a number and using the &lt;a href=&#34;https://www.math.utah.edu/~fguevara/ACCESS2013/Euclid.pdf&#34;&gt;Extended Euclidean Algorithm&lt;/a&gt;, better performance can be achieved.&lt;/p&gt;
+
+&lt;h1 id=&#34;key-generation-contd-1&#34;&gt;Key Generation (contd.)&lt;/h1&gt;
+
+&lt;p&gt;Alright, so we have,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;e = 11, φ(n) = 72, 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we need to calculate their modular multiplicative inverse such that:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;e*d mod φ(n) = 1 mod φ(n)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let’s find the value of d!&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;11 * 0 ≡ 0 ≡ 0 (mod 72)&lt;/li&gt;
+&lt;li&gt;11 * 1 ≡ 11 ≡ 11 (mod 72)&lt;/li&gt;
+&lt;li&gt;11 * 2 ≡ 22 ≡ 22 (mod 72)&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&amp;hellip;..&lt;/li&gt;
+&lt;li&gt;11 * 59 ≡ 649 ≡ 1 (mod 72) —&amp;gt; gotcha&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Therefore,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;d = 59 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With this computation done, the public key is made with the values in &lt;em&gt;n&lt;/em&gt; and &lt;em&gt;e&lt;/em&gt; and the private key is made using values in &lt;em&gt;n&lt;/em&gt; and &lt;em&gt;d&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;One question does arise though, why did we calculate the modular inverse of &lt;em&gt;e&lt;/em&gt; ? Consider the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;E(M) = M^e mod n
+C ≡ M^e mod n
+D(C) = C^d mod n
+C^d ≡ (M^e)^d mod n
+C^d ≡ (M^(e*d)) mod n
+e*d ≡ 1 mod n 
+e*d ≡ kϕ(n)+1
+=&amp;gt; D(C) = M^(kϕ(n)+1) mod n
+=&amp;gt; D(C) = M * (M^ϕ(n))^k
+=&amp;gt; D(C) = M * (1 mod n)^k
+=&amp;gt; D(C) = M * 1^k
+=&amp;gt; D(C) = M         [original message]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By finding the inverse of e, we find the value which when the message is raised to gives back the original message, thereby acheiving a working public-private key cryptosystem.&lt;/p&gt;
+
+&lt;h1 id=&#34;simple-example&#34;&gt;Simple Example&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;e = 11
+d = 59
+n = 91
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let the message be &lt;em&gt;9&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Encryption:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;E(M) = M^e mod n
+=&amp;gt; 9^11 mod 91
+=&amp;gt; 81
+D(C) = C^d mod n
+=&amp;gt; 81^59 mod 91
+=&amp;gt; 9 [the original message]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;errata&#34;&gt;Errata&lt;/h1&gt;
+
+&lt;p&gt;The idea behind the public key is to have a prime number between 3 and φ(n). Normally, values behind public key cryptography involves large numbers (if you remember, the size of the key could be as high as 2^1023 or 2^2023 but we’re mostly pushing it at key lengths above 2024 bits), so popular implementations set it as &lt;a href=&#34;http://crypto.stackexchange.com/questions/3110/impacts-of-not-using-rsa-exponent-of-65537&#34;&gt;65537&lt;/a&gt; as a good tradeoff between sufficiently high and being a decent enough cost to raise a number to.
+A good point that might be made is whether or not the fact that everyone knows if 65537 is a public key exponent. This is the public key that is being shared with people anyway and as long as one cannot deduce the private key from it, there should not be a problem.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
