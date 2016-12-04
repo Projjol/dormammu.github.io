@@ -88,7 +88,7 @@ Euler’s totient that we saw in the previous section comes of use now, especial
 
 &lt;p&gt;This value calculated for Euler&amp;rsquo;s totient is kept a secret.&lt;/p&gt;
 
-&lt;p&gt;Now, an integer &lt;em&gt;e&lt;/em&gt; needs to be obtained such that 1 &amp;gt; &lt;em&gt;e&lt;/em&gt; &amp;lt; φ(&lt;em&gt;n&lt;/em&gt;) and gcd(&lt;em&gt;e&lt;/em&gt;, φ(&lt;em&gt;n&lt;/em&gt;)) =1, i.e &lt;em&gt;e&lt;/em&gt; &amp;amp; φ(&lt;em&gt;n&lt;/em&gt;) are coprime.
+&lt;p&gt;Now, an integer &lt;em&gt;e&lt;/em&gt; needs to be obtained such that 1 &amp;lt; &lt;em&gt;e&lt;/em&gt; &amp;lt; φ(&lt;em&gt;n&lt;/em&gt;) and gcd(&lt;em&gt;e&lt;/em&gt;, φ(&lt;em&gt;n&lt;/em&gt;)) =1, i.e &lt;em&gt;e&lt;/em&gt; &amp;amp; φ(&lt;em&gt;n&lt;/em&gt;) are coprime.
 Let,&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;e = 11
@@ -100,17 +100,10 @@ Let,&lt;/p&gt;
 
 &lt;h1 id=&#34;modular-multiplicative-inverse&#34;&gt;Modular Multiplicative Inverse&lt;/h1&gt;
 
-&lt;p&gt;Let’s say we have a number &lt;em&gt;n&lt;/em&gt;. The multiplicative inverse of &lt;em&gt;n&lt;/em&gt; would be &lt;em&gt;n&lt;/em&gt;^-1, such that &lt;em&gt;n&lt;/em&gt;*&lt;em&gt;n&lt;/em&gt;^-1 = 1
-In modular mathematics, the modular inverse of &lt;em&gt;n&lt;/em&gt;(mod &lt;em&gt;c&lt;/em&gt;) is &lt;em&gt;n&lt;/em&gt;^-1 for some number &lt;em&gt;c&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Let’s say we have a number &lt;em&gt;n&lt;/em&gt;. The multiplicative inverse of &lt;em&gt;n&lt;/em&gt; would be &lt;em&gt;n&lt;/em&gt;^-1, such that &lt;em&gt;n&lt;/em&gt; * &lt;em&gt;n&lt;/em&gt;^-1 = 1. What we&amp;rsquo;re looking for is a number x such that &lt;em&gt;n&lt;/em&gt;*&lt;em&gt;x&lt;/em&gt; mod &lt;em&gt;c&lt;/em&gt; = 1
+Therefore,&lt;/p&gt;
 
-&lt;p&gt;We have,&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;n * n^-1 = 1 (mod c) = 1 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Therefore,&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;n * n(mod c) = 1
+&lt;pre&gt;&lt;code&gt;n * x(mod c) = 1
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;All of this is fine, but how do we calculate how to actually calculate the modular inverse?&lt;/p&gt;
