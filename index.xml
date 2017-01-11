@@ -5,7 +5,71 @@
     <link>http://blog.projjol.me/index.xml</link>
     <language>en-us</language>
     <author>Alexander Ivanov</author>
-    <updated>2016-11-24 12:09:47 &#43;0530 IST</updated>
+    <updated>2017-01-11 16:14:32 &#43;0530 IST</updated>
+    
+    <item>
+      <title>Getting started in Vim-Land</title>
+      <link>http://blog.projjol.me/post/getting-started-in-vimland/</link>
+      <pubDate>Wed, 11 Jan 2017 16:14:32 IST</pubDate>
+      <author>Alexander Ivanov</author>
+      <guid>http://blog.projjol.me/post/getting-started-in-vimland/</guid>
+      <description>
+
+&lt;h2 id=&#34;the-very-slow-move-to-vim&#34;&gt;The (very) slow move to Vim&lt;/h2&gt;
+
+&lt;p style=&#34;text-align: center;&#34;&gt;&lt;img src=&#34;../../img/vim-lotr.jpeg&#34; alt=&#34;Vim 101&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Over many years I&amp;rsquo;ve heard of the myth of the genius programmer (MotGP) who commands bits to move at his/her will using only Vim/Emacs(now, now don&amp;rsquo;t start a flame war) as the weapon of their choice. I used vim for the first time in college. I don&amp;rsquo;t remember the details but I was basically in an environment that did not support any graphical text editors. The two options I had were Vim and Nano. I decided to give things a shot with Vim but it went pretty terribly, I had no idea about how to use it and eventually skipped over to Nano, which I was familiar with.&lt;/p&gt;
+
+&lt;p&gt;Skip forward two years and the situation is slightly different. I can do meagre editing jobs on the terminal using vi. I&amp;rsquo;m aware of the very least, :i, :q, :wq, :q! and that&amp;rsquo;s when I was re-introduced to the MotGP and I was genuinely interested. This post will serve as a personal cheat-sheet, I&amp;rsquo;ll keep updating it as and when I learn more of vim-foo. The approach I&amp;rsquo;m taking is rather non-radical. I have not given up on Sublime Text, which is my TE of choice. For smaller/non-regular/non-mission-critical tasks such as writing this blog, I&amp;rsquo;m going to do it in Vim. Shortcuts that I&amp;rsquo;m gonna learn/add here will be those that I use regularly while editing text in Sublime.&lt;/p&gt;
+
+&lt;h2 id=&#34;vim-foo&#34;&gt;Vim-foo&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;:wq = Write to file and quit Vim
+
+:q = Save file and quit Vim [works only if you haven&#39;t edited the file]
+
+:q! = Don&#39;t save changes and quit Vim
+
+:help = Find Vim help
+
+i = Insert mode
+
+a = Append text after cursor
+
+A = Append text at the end-of-line [think cmd+right arrow]
+
+$ = Go to end of line [does not bring up insert mode]
+
+gg = Go to beginning of file
+
+G = Go to end of file
+
+b = Go back one word at a time
+
+w = Go forward one word at a time
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;vim-rc-so-far&#34;&gt;vim.rc [so far]&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;set autoindent
+
+set softtabstop=4
+
+set expandtab
+
+set shiftwidth=4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;autoindent&lt;/em&gt; = copies indent from the previous line&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;softtabstop&lt;/em&gt; = amount of space a &lt;TAB&gt; key adds&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;expandtab&lt;/em&gt; = Fills space added by a &lt;TAB&gt; key with spaces and not \t&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;shiftwidth&lt;/em&gt; = number of spaces for indent, useful when using cindent&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Understanding RSA</title>
@@ -100,7 +164,8 @@ Let,&lt;/p&gt;
 
 &lt;h1 id=&#34;modular-multiplicative-inverse&#34;&gt;Modular Multiplicative Inverse&lt;/h1&gt;
 
-&lt;p&gt;Let’s say we have a number &lt;em&gt;n&lt;/em&gt;. The multiplicative inverse of &lt;em&gt;n&lt;/em&gt; would be &lt;em&gt;n&lt;/em&gt;^-1, such that &lt;em&gt;n&lt;/em&gt; * &lt;em&gt;n&lt;/em&gt;^-1 = 1. What we&amp;rsquo;re looking for is a number x such that &lt;em&gt;n&lt;/em&gt;*&lt;em&gt;x&lt;/em&gt; mod &lt;em&gt;c&lt;/em&gt; = 1
+&lt;p&gt;Let’s say we have a number &lt;em&gt;n&lt;/em&gt;. The multiplicative inverse of &lt;em&gt;n&lt;/em&gt; would be &lt;em&gt;n&lt;/em&gt;^-1, such that &lt;em&gt;n&lt;/em&gt;&lt;em&gt;&lt;em&gt;n&lt;/em&gt;^-1 = 1
+In modular mathematics, the modular inverse of &lt;em&gt;n&lt;/em&gt;(mod &lt;em&gt;c&lt;/em&gt;) is &lt;em&gt;n&lt;/em&gt;^-1 for some number &lt;em&gt;c&lt;/em&gt;. What we&amp;rsquo;re looking for is a number x such that &lt;em&gt;n&lt;/em&gt;&lt;/em&gt;&lt;em&gt;x&lt;/em&gt; mod &lt;em&gt;c&lt;/em&gt; = 1
 Therefore,&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;n * x(mod c) = 1

@@ -1,0 +1,146 @@
+	
+	<!doctype html>
+<html lang="en">
+  <head>    
+    <title>Macrocosm - Getting started in Vim-Land</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    
+    <link href="../../css/milk.min.css" rel="stylesheet">
+    <link href="../../css/milk-responsive.min.css" rel="stylesheet">     
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../../css/fonts.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="shortcut icon" href="../../images/jedi.ico"> 
+    <link rel="apple-touch-icon" href="">
+    <link rel="canonical" href="http://blog.projjol.me/post/getting-started-in-vimland/">
+
+    
+    <link href="../../rss.xml" type="application/atom+xml" rel="alternate" title="Macrocosm">    
+
+  </head>
+  <body>    
+    <div class="navbar navbar-fixed-top">        
+  <div id="navbar-inner">
+          <div id="logo" class="">
+            <a href=""><img src="../../images/jedi.png" width="100px"></img></a>
+          </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="content">
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="posts">
+      
+
+	    
+	  <div class="post">
+	    <header class="post-header">
+	        <h1><a href="../../post/getting-started-in-vimland/">Getting started in Vim-Land</a></h1>
+	        <div class="post-time">January 11 2017</div>
+	    </header>
+	    <div class="post-after">
+	        <div class="tags">
+	            
+	        </div>
+	    </div>
+	    <hr>
+	    <div class="post content">
+	        
+
+<h2 id="the-very-slow-move-to-vim">The (very) slow move to Vim</h2>
+
+<p style="text-align: center;"><img src="../../img/vim-lotr.jpeg" alt="Vim 101"></p>
+
+<p>Over many years I&rsquo;ve heard of the myth of the genius programmer (MotGP) who commands bits to move at his/her will using only Vim/Emacs(now, now don&rsquo;t start a flame war) as the weapon of their choice. I used vim for the first time in college. I don&rsquo;t remember the details but I was basically in an environment that did not support any graphical text editors. The two options I had were Vim and Nano. I decided to give things a shot with Vim but it went pretty terribly, I had no idea about how to use it and eventually skipped over to Nano, which I was familiar with.</p>
+
+<p>Skip forward two years and the situation is slightly different. I can do meagre editing jobs on the terminal using vi. I&rsquo;m aware of the very least, :i, :q, :wq, :q! and that&rsquo;s when I was re-introduced to the MotGP and I was genuinely interested. This post will serve as a personal cheat-sheet, I&rsquo;ll keep updating it as and when I learn more of vim-foo. The approach I&rsquo;m taking is rather non-radical. I have not given up on Sublime Text, which is my TE of choice. For smaller/non-regular/non-mission-critical tasks such as writing this blog, I&rsquo;m going to do it in Vim. Shortcuts that I&rsquo;m gonna learn/add here will be those that I use regularly while editing text in Sublime.</p>
+
+<h2 id="vim-foo">Vim-foo</h2>
+
+<pre><code>:wq = Write to file and quit Vim
+
+:q = Save file and quit Vim [works only if you haven't edited the file]
+
+:q! = Don't save changes and quit Vim
+
+:help = Find Vim help
+
+i = Insert mode
+
+a = Append text after cursor
+
+A = Append text at the end-of-line [think cmd+right arrow]
+
+$ = Go to end of line [does not bring up insert mode]
+
+gg = Go to beginning of file
+
+G = Go to end of file
+
+b = Go back one word at a time
+
+w = Go forward one word at a time
+</code></pre>
+
+<h2 id="vim-rc-so-far">vim.rc [so far]</h2>
+
+<pre><code>set autoindent
+
+set softtabstop=4
+
+set expandtab
+
+set shiftwidth=4
+</code></pre>
+
+<p><em>autoindent</em> = copies indent from the previous line</p>
+
+<p><em>softtabstop</em> = amount of space a <TAB> key adds</p>
+
+<p><em>expandtab</em> = Fills space added by a <TAB> key with spaces and not \t</p>
+
+<p><em>shiftwidth</em> = number of spaces for indent, useful when using cindent</p>
+
+	    </div>
+	    
+	<div class="about">
+	<p> 
+     
+    </p>
+</div>
+		<nav id="pagination">
+			
+			<a class="next" href="http://blog.projjol.me/post/understanding-RSA/">Next</a>
+		</nav>
+	
+		        <footer>
+		        	Built with <a href="https://github.com/spf13/hugo">Hugo</a> using <a href="themes.gohugo.io/simple-a/">simple-a</a> theme and ♥ 
+		        	<p>© Projjol Banerji 2016</p>
+		        </footer>
+		    </div>
+		  </div>    
+		</div>
+      </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + ":change-me";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 4]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="http://change-me" style="border:0;" alt="" /></p></noscript>
+
+
+</html>
